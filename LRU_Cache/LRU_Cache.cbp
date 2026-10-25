@@ -31,6 +31,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="TDA_LISTA/TDA_Lista.h" />
+		<Unit filename="TDA_LISTA/TDA_lista.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="TDA_Lista.h" />
 		<Unit filename="TDA_lista.c">
 			<Option compilerVar="CC" />

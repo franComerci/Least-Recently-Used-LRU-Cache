@@ -1,4 +1,4 @@
-#include "TDA_Lista.h"
+#include "TDA_LISTA/TDA_Lista.h"
 
 int main()
 {
@@ -9,10 +9,6 @@ int main()
 
 
 //PRUEBA TDA_LISTA
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include "TDA_Lista.h"
-//
 //int main()
 //{
 //    tLista lista;
