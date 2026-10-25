@@ -1,6 +1,6 @@
 #include "TDA_Cache_Lista.h"
 
-void crearLruCache(tCache *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp)
+void crearLruCache(tCache *cache, size_t maxCap, size_t tamClave, size_t tamDato)
 {
     crearLista(&(cache->lista));
     cache->cap = maxCap;
@@ -85,8 +85,6 @@ void vaciarLruCache(tCache *cache)
 
     cache->ce = 0;
 }
-
-
 
 int extraerDeCache(tCache *cache, const void *clave, tElemCache *elem, Cmp cmp)
 {

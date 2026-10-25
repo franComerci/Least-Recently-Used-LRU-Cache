@@ -1,12 +1,117 @@
-#include "TDA_LISTA/TDA_Lista.h"
+//#include "TDA_LISTA/TDA_Lista.h"
+//
+//int main()
+//{
+//
+//
+//    return 0;
+//}
+
+///PRUEBA GEMINI de las primitivas, habría que probarlo con archivos como dijo el profe
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Asegúrate de incluir tus headers aquí
+#include "TDA_Cache_Lista_Simple/TDA_Cache_Lista.h"
+
+
+// Función de comparación para las claves (enteros)
+int cmpInt(const void *a, const void *b)
+{
+    int *claveA = (int*)a;
+    int *claveB = (int*)b;
+    return *claveA - *claveB;
+}
+
+// Función auxiliar para imprimir el estado interno de la lista
+void mostrarCache(tCache *cache)
+{
+    tNodo *actual = cache->lista;
+    printf("Estado Cache (%d/%d):\n", cache->ce, cache->cap);
+
+    if (actual == NULL) {
+        printf("  (Cache vacia)\n");
+    }
+
+    while (actual != NULL)
+    {
+        tElemCache *elem = (tElemCache*)actual->info;
+        int *clave = (int*)elem->clave;
+        char *dato = (char*)elem->dato;
+
+        printf(" -> [Clave: %d | Dato: %s]\n", *clave, dato);
+        actual = actual->sig;
+    }
+    printf("------------------------\n");
+}
 
 int main()
 {
+    tCache cache;
+    int clave;
+    char dato[20];
+    char datoSalida[20];
 
+    printf("1. PROBANDO CREAR CACHE\n");
+    crearLruCache(&cache, 3, sizeof(int), sizeof(char) * 20);
+    mostrarCache(&cache);
+
+    printf("\n2. PROBANDO AGREGAR (Llenando la cache)\n");
+    clave = 1; strcpy(dato, "Uno");
+    agregarLruCache(&cache, &clave, dato, cmpInt);
+
+    clave = 2; strcpy(dato, "Dos");
+    agregarLruCache(&cache, &clave, dato, cmpInt);
+
+    clave = 3; strcpy(dato, "Tres");
+    agregarLruCache(&cache, &clave, dato, cmpInt);
+    mostrarCache(&cache); // Deberia verse: 3, 2, 1
+
+    printf("\n3. PROBANDO DESBORDE (Agregando un 4to elemento)\n");
+    clave = 4; strcpy(dato, "Cuatro");
+    agregarLruCache(&cache, &clave, dato, cmpInt);
+    mostrarCache(&cache); // Se va el 1. Deberia verse: 4, 3, 2
+
+    printf("\n4. PROBANDO OBTENER (Clave 2)\n");
+    clave = 2;
+    if (obtenerLruCache(&cache, &clave, datoSalida, cmpInt)) {
+        printf("Obtenido exitosamente: %s\n", datoSalida);
+    } else {
+        printf("Error: No se encontro la clave %d\n", clave);
+    }
+    mostrarCache(&cache); // El 2 pasa al frente. Deberia verse: 2, 4, 3
+
+    printf("\n5. PROBANDO ACTUALIZAR (Re-insertando clave 4)\n");
+    clave = 4; strcpy(dato, "Cuatro-Mod");
+    agregarLruCache(&cache, &clave, dato, cmpInt);
+    mostrarCache(&cache); // El 4 se actualiza y pasa al frente. Deberia verse: 4, 2, 3
+
+    printf("\n6. PROBANDO BORRAR (Clave 3)\n");
+    clave = 3;
+    if (borrarLruCache(&cache, &clave, cmpInt)) {
+        printf("Clave %d borrada exitosamente.\n", clave);
+    } else {
+        printf("Error al borrar: clave %d no existe.\n", clave);
+    }
+    mostrarCache(&cache); // Deberia verse: 4, 2. Cantidad: 2/3
+
+    printf("\n7. PROBANDO CASOS DE ERROR (Obtener y borrar algo que no existe)\n");
+    clave = 99;
+    if (!obtenerLruCache(&cache, &clave, datoSalida, cmpInt)) {
+        printf("Correcto: No se pudo obtener la clave %d porque no existe.\n", clave);
+    }
+    if (!borrarLruCache(&cache, &clave, cmpInt)) {
+        printf("Correcto: No se pudo borrar la clave %d porque no existe.\n", clave);
+    }
+
+    printf("\n8. PROBANDO VACIAR CACHE\n");
+    vaciarLruCache(&cache);
+    mostrarCache(&cache); // Deberia verse vacia, cantidad 0/3
 
     return 0;
+    return 0;
 }
-
 
 //PRUEBA TDA_LISTA
 //int main()

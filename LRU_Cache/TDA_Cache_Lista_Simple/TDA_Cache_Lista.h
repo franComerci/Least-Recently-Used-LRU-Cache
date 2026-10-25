@@ -21,7 +21,7 @@ typedef struct
 typedef int (*Cmp)(const void *a, const void *b);
 
 
-void crearLruCache(tCache *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp);
+void crearLruCache(tCache *cache, size_t maxCap, size_t tamClave, size_t tamDato);
 int agregarLruCache(tCache *cache, const void *clave, const void *dato, Cmp cmp);
 int obtenerLruCache(tCache *cache, const void *clave, void *dato, Cmp cmp);
 int borrarLruCache(tCache *cache, void *clave, Cmp cmp);
