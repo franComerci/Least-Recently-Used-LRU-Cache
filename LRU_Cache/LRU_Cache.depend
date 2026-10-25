@@ -1,7 +1,5 @@
 # depslib dependency file v1.0
-1792958266 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\main.c
-	<stdio.h>
-	<stdlib.h>
+1792958449 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\main.c
 	"TDA_LISTA/TDA_Lista.h"
 
 1792957323 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista.h
