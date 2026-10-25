@@ -18,3 +18,9 @@
 1792957794 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista\tda_lista.c
 	"TDA_Lista.h"
 
+1792965480 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_cache_lista_simple\tda_cache_lista.c
+	"TDA_Cache_Lista.h"
+
+1792964516 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_cache_lista_simple\tda_cache_lista.h
+	"../TDA_LISTA/TDA_Lista.h"
+
