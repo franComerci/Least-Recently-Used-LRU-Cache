@@ -98,7 +98,8 @@ int extraerDeCache(tCache *cache, const void *clave, tElemCache *elem, Cmp cmp)
         if(cmp(elemActual->clave, clave) == 0)//encuentro la clave
         {
             *elem = *elemActual;
-
+            //saco el nodo
+            //esto es para conectar los nodos, sacando el que esta en el medio
             if(anterior == NULL)//primero
                 cache->lista = actual->sig;
             else
