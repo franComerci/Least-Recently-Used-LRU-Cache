@@ -1,17 +1,18 @@
 #include "TDA_LISTA_DOBLE.h"
 ///FUNCIONES DE CACHE CON LISTA DOBLE
 
-void crearLruCacheListaDoble(tCacheListaDoble *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp)
+void crearLruCacheListaDobleyArbol(tCacheListaDoble *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp)
 {
     cache->cap = maxCap;
     cache->tamClave = tamClave;
     cache->tamDato = tamDato;
     cache->cmp = cmp;
     crearListaDoble(&cache->listaDoble);
+    crearArbol(&cache->arbol);
     cache->ce = 0;
 }
 
-int agregarLruCacheListaDoble(tCacheListaDoble *cache, const void *clave, tElemCacheListaDoble *dato)
+int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, const void *dato)
 {
     if (cache->ce >= cache->cap)
     {
@@ -20,12 +21,13 @@ int agregarLruCacheListaDoble(tCacheListaDoble *cache, const void *clave, tElemC
         if (obtenerLruCacheListaDoble(cache, NULL, &lru) == 0)
         {
             eliminarLruCacheListaDoble(cache, lru.clave);
+        
             cache->ce--;
         }
     }
 
     // Insertar el nuevo elemento en la lista
-    if (insertarOrdenadoDoble(&cache->listaDoble, dato, sizeof(tElemCacheListaDoble), cache->cmp) == 0)
+    if (insertarOrdenadoDoble(&cache->listaDoble, dato, sizeof(tElemCacheListaDoble), cache->cmp) == 0 && insertarordenadoArbol(&cache->arbol, clave, dato, cache->tamClave, cache->tamDato, cache->cmp) == 0)
     {
         cache->ce++;
         return 0; // Éxito
@@ -33,7 +35,7 @@ int agregarLruCacheListaDoble(tCacheListaDoble *cache, const void *clave, tElemC
     return 1; // Error al insertar
 }
 
-int obtenerLruCacheListaDoble(tCacheListaDoble *cache, const void *clave, void *dato)
+int obtenerLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, void *dato)
 {
     
     tNodo *nodo = cache->listaDoble;
@@ -52,7 +54,7 @@ int obtenerLruCacheListaDoble(tCacheListaDoble *cache, const void *clave, void *
     return 1; // No se encontró la clave
 }
 
-int borrarLruCacheListaDoble(tCacheListaDoble *cache, const void *clave)
+int borrarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave)
 {
     tNodo *nodo = cache->listaDoble;
 

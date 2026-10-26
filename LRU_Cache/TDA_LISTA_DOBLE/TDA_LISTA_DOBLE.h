@@ -42,13 +42,13 @@ int  listaVaciaDoble(const tListaDoble *pl);
 void vaciarListaDoble(tListaDoble *pl);
 
 ///FUNCIONES DE CACHE CON LISTA DOBLE
-void crearLruCacheListaDoble(tCacheListaDoble *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp);
-int agregarLruCacheListaDoble(tCacheListaDoble *cache, const void *clave, tElemCacheListaDoble *dato);
-int obtenerLruCacheListaDoble(tCacheListaDoble *cache, const void *clave, void *dato);
-int borrarLruCacheListaDoble(tCacheListaDoble *cache, const void *clave);
-int vaciarLruCacheListaDoble(tCacheListaDoble *cache);
-int destruirLruCacheListaDoble(tCacheListaDoble *cache);
-int cacheListaDobleLlena(const tCacheListaDoble *cache);
-int cacheListaDobleVacia(const tCacheListaDoble *cache);
+void crearLruCacheListaDobleyArbol(tCacheListaDoble *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp);
+int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, tElemCacheListaDoble *dato);
+int obtenerLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, void *dato);
+int borrarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave);
+int vaciarLruCacheListaDobleyArbol(tCacheListaDoble *cache);
+int destruirLruCacheListaDobleyArbol(tCacheListaDoble *cache);
+int cacheListaDobleLlenayArbol(const tCacheListaDoble *cache);
+int cacheListaDobleVaciayArbol(const tCacheListaDoble *cache);
 
 #endif // TDA_LISTA_DOBLE_H_INCLUDED
