@@ -26,5 +26,9 @@ int verPrimeroLista(tLista *pl, void *pd, size_t cantBytes);
 int ponerUltimoLista(tLista *pl, const void *pd, size_t cantBytes);
 int sacarUltimoLista(tLista *pl, void *pd, size_t cantBytes);
 int verUltimoLista(tLista *pl, void *pd, size_t cantBytes);
+/*
+por si queremos cambiar extraerDeCache
+int sacarDeLista(tLista *pl, void *pd, size_t cantBytes, const void *busq, Cmp cmp, void *params);
+*/
 
 #endif // TDA_LISTA_H_INCLUDED

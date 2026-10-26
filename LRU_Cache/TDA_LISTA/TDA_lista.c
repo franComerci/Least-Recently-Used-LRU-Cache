@@ -18,7 +18,7 @@ int listaLlena(const tLista *pl, size_t cantBytes)
     free(aux);
     free(info);
 
-    return aux == NULL || info == NULL;//aux o info tendrían NULL si nunca se pudo hacer el malloc
+    return aux == NULL || info == NULL;//aux o info tendrï¿½an NULL si nunca se pudo hacer el malloc
 }
 
 void vaciarLista(tLista *pl)
@@ -43,7 +43,7 @@ int ponerPrimeroLista(tLista *pl, const void *pd, size_t cantBytes)
     }
 
     memcpy(nuevo->info, pd, cantBytes);//copio elemento
-    nuevo->tamInfo = cantBytes;//copio tamaño
+    nuevo->tamInfo = cantBytes;//copio tamaï¿½o
     nuevo->sig = *pl;//el siguiente va a ser el actual inicio de la lista
     *pl = nuevo;//actualizo el pl
 
@@ -58,7 +58,7 @@ int sacarPrimeroLista(tLista *pl, void *pd, size_t cantBytes)
         return 0;
 
     *pl = aux->sig;
-    memcpy(pd, aux->info, MIN(cantBytes, aux->tamInfo));//saco el min de tamaño porque puede ser que no este contiguo en memoria
+    memcpy(pd, aux->info, MIN(cantBytes, aux->tamInfo));//saco el min de tamaï¿½o porque puede ser que no este contiguo en memoria
     free(aux->info);
     free(aux);
 

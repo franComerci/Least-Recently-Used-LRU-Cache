@@ -1,9 +1,11 @@
 # depslib dependency file v1.0
-1792966543 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\main.c
+1793052149 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"TDA_Cache_Lista_Simple/TDA_Cache_Lista.h"
+	"Utilitiarias.h"
+	"comun.h"
 
 1792957323 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista.h
 	<stdio.h>
@@ -13,17 +15,44 @@
 1792957794 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista.c
 	"TDA_Lista.h"
 
-1792957323 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista\tda_lista.h
+1793051533 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista\tda_lista.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 
-1792957794 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista\tda_lista.c
+1793052057 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista\tda_lista.c
 	"TDA_Lista.h"
 
-1792966543 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_cache_lista_simple\tda_cache_lista.c
+1793052089 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_cache_lista_simple\tda_cache_lista.c
 	"TDA_Cache_Lista.h"
 
-1792966543 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_cache_lista_simple\tda_cache_lista.h
+1793051225 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_cache_lista_simple\tda_cache_lista.h
 	"../TDA_LISTA/TDA_Lista.h"
+	"../comun.h"
+
+1793052097 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\comun.c
+	"comun.h"
+
+1793051733 c:\users\admin\desktop\algoritmos\tp\lru_cache\comun.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1793052088 c:\users\admin\desktop\algoritmos\tp\lru_cache\utilitiarias.h
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<stdbool.h>
+	"TDA_Cache_Lista_Simple/TDA_Cache_Lista.h"
+
+1793051790 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_arbol\tda_arbol.c
+
+1793051158 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista_doble\tda_lista_doble.c
+	"TDA_LISTA_DOBLE.h"
+
+1793051158 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista_doble\tda_lista_doble.h
+
+1793052087 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\utilitarias.c
+	"comun.h"
+	"Utilitiarias.h"
 

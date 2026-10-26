@@ -2,9 +2,7 @@
 #define TDA_CACHE_LISTA_H_INCLUDED
 
 #include "../TDA_LISTA/TDA_Lista.h"
-
-typedef int (*Cmp)(const void *a, const void *b);
-
+#include "../comun.h"
 typedef struct
 {
     tLista lista;
@@ -21,7 +19,8 @@ typedef struct
     void *clave;//para buscar
 }tElemCache;//para guardar en la lista
 
-
+typedef int (*Cmp)(const void *a, const void *b);
+typedef void (*actualizar) (void*, const void*);
 
 void crearLruCache(tCache *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp);
 int agregarLruCache(tCache *cache, const void *clave, const void *dato);
