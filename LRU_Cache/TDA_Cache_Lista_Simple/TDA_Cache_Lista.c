@@ -1,19 +1,20 @@
 #include "TDA_Cache_Lista.h"
 
-void crearLruCache(tCache *cache, size_t maxCap, size_t tamClave, size_t tamDato)
+void crearLruCache(tCache *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp)
 {
     crearLista(&(cache->lista));
     cache->cap = maxCap;
     cache->ce = 0;
     cache->tamClave = tamClave;
     cache->tamDato = tamDato;
+    cache->cmp = cmp;
 }
 
-int agregarLruCache(tCache *cache, const void *clave, const void *dato, Cmp cmp)
+int agregarLruCache(tCache *cache, const void *clave, const void *dato)
 {
     tElemCache elem;
 
-    if(extraerDeCache(cache, clave, &elem, cmp))//me fijo si esta en la cache
+    if(extraerDeCache(cache, clave, &elem))//me fijo si esta en la cache
     {
         memcpy(elem.dato, dato, cache->tamDato);
     }
@@ -31,7 +32,17 @@ int agregarLruCache(tCache *cache, const void *clave, const void *dato, Cmp cmp)
         }
 
         elem.clave = malloc(cache->tamClave);//pido memoria para el actual
+        if(!elem.clave)
+        {
+            return 0;
+        }
+
         elem.dato = malloc(cache->tamDato);
+        if(!elem.dato)
+        {
+            free(elem.clave);
+            return 0;
+        }
 
         memcpy(elem.clave, clave, cache->tamClave);
         memcpy(elem.dato, dato, cache->tamDato);
@@ -44,11 +55,11 @@ int agregarLruCache(tCache *cache, const void *clave, const void *dato, Cmp cmp)
     return 1;
 }
 
-int obtenerLruCache(tCache *cache, const void *clave, void *dato, Cmp cmp)
+int obtenerLruCache(tCache *cache, const void *clave, void *dato)
 {
     tElemCache elem;
 
-    if(extraerDeCache(cache, clave, &elem, cmp))
+    if(extraerDeCache(cache, clave, &elem))
     {
         memcpy(dato, elem.dato, cache->tamDato);
         ponerPrimeroLista(&(cache->lista), &elem, sizeof(tElemCache));
@@ -58,11 +69,11 @@ int obtenerLruCache(tCache *cache, const void *clave, void *dato, Cmp cmp)
     return 0;
 }
 
-int borrarLruCache(tCache *cache, void *clave, Cmp cmp)
+int borrarLruCache(tCache *cache, const void *clave)
 {
     tElemCache elem;
 
-    if(extraerDeCache(cache, clave, &elem, cmp))
+    if(extraerDeCache(cache, clave, &elem))
     {
         free(elem.clave);
         free(elem.dato);
@@ -86,7 +97,7 @@ void vaciarLruCache(tCache *cache)
     cache->ce = 0;
 }
 
-int extraerDeCache(tCache *cache, const void *clave, tElemCache *elem, Cmp cmp)
+int extraerDeCache(tCache *cache, const void *clave, tElemCache *elem)
 {
     tNodo *actual = cache->lista;
     tNodo *anterior = NULL;
@@ -95,7 +106,7 @@ int extraerDeCache(tCache *cache, const void *clave, tElemCache *elem, Cmp cmp)
     {
         tElemCache *elemActual = (tElemCache *)actual->info;
 
-        if(cmp(elemActual->clave, clave) == 0)//encuentro la clave
+        if(cache->cmp(elemActual->clave, clave) == 0)//encuentro la clave
         {
             *elem = *elemActual;
             //saco el nodo
