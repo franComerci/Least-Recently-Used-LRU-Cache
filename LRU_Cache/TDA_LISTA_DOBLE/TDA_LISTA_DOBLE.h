@@ -5,15 +5,15 @@
 #include <string.h>
 #include "../comun.h"
 #include "../TDA_ARBOL/TDA_ARBOL.h"
-typedef struct sNodo
+typedef struct sNodo2
 {
     void *dato;
     unsigned tam;
-    struct sNodo *sig;
-    struct sNodo *ant;
-}tNodo;
+    struct sNodo2 *sig;
+    struct sNodo2 *ant;
+}tNodo2;
 
-typedef tNodo *tListaDoble;
+typedef tNodo2 *tListaDoble;
 
 typedef struct
 {
@@ -40,6 +40,8 @@ int  eliminarNodoDoble(tListaDoble *pl, void *dato, unsigned tam, Cmp comparar);
 int  listaLlenaDoble(const tListaDoble *pl, unsigned tam);
 int  listaVaciaDoble(const tListaDoble *pl);
 void vaciarListaDoble(tListaDoble *pl);
+
+void eliminarNodoDobleArbol(tListaDoble *pl, tNodo2 *nodo);
 
 ///FUNCIONES DE CACHE CON LISTA DOBLE
 void crearLruCacheListaDobleyArbol(tCacheListaDoble *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp);

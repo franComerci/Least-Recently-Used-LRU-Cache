@@ -31,6 +31,13 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Comun.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="TDA_ARBOL/TDA_ARBOL.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="TDA_ARBOL/TDA_ARBOL.h" />
 		<Unit filename="TDA_Cache_Lista_Simple/TDA_Cache_Lista.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -39,6 +46,15 @@
 		<Unit filename="TDA_LISTA/TDA_lista.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="TDA_LISTA_DOBLE/TDA_LISTA_DOBLE.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="TDA_LISTA_DOBLE/TDA_LISTA_DOBLE.h" />
+		<Unit filename="Utilitarias.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Utilitiarias.h" />
+		<Unit filename="comun.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
