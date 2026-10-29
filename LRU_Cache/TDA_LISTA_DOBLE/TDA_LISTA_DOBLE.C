@@ -1,6 +1,6 @@
 #include "TDA_LISTA_DOBLE.h"
 #include "../TDA_ARBOL/TDA_ARBOL.h"
-///FUNCIONES DE CACHE CON LISTA DOBLE
+///FUNCIONES DE CACHE CON LISTA DOBLE Y ARBOL
 
 void crearLruCacheListaDobleyArbol(tCacheListaDoble *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp)
 {
@@ -72,8 +72,51 @@ int vaciarLruCacheListaDobleyArbol(tCacheListaDoble *cache)
 
     return 1;
 }
+///BORRAR CACHE Y LISTA DOBLE
+
+int borrarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave){
+    tElemCacheListaDoble elemAux;
+    elemAux.clave = (void*) clave;
+
+    tNodo2 nodoAux;
+    nodoAux.dato = &elemAux;
+    tNodo2 *ptrNodo = &nodoAux; // tNodo2 *
+
+    tArbol *pSubArbol = buscarClave(&cache->arbol, cache->cmp,&ptrNodo); //aca pasamos ptrNodo como tNodo **, que es el formato que tiene el arbol
+    if(!pSubArbol || !*pSubArbol)// si el arbol no tiene elementos O no se encontro el elemento
+        return 0;//no encontro
+
+    tNodo2 * nodoLista = *(tNodo2**)(*pSubArbol)->dato; //obtenemos el puntero al nodo de la lista guardado en el arbol
+    // (*pSubArbol)->dato aca accedemos al campo dato de ese nodo del arbol
+    // Luego necesitamos castear para que el programa lo reinterprete (tNodo2 **) y con el * accedemos al dato
 
 
+    if(nodoLista->ant)//ahora desenlazamos el nodo de la lista doble
+        nodoLista->ant->sig = nodoLista->sig;
+    else
+        cache->listaDoble = nodoLista->sig;
+
+    if(nodoLista->sig)
+        nodoLista->sig->ant = nodoLista->ant;
+
+    //eliminamos del arbol
+    eliminarNodo(&cache->arbol,&ptrNodo,sizeof(tNodo2 *),cache->cmp);
+
+    //eliminamos el nodo de la lista y la memoria
+    tElemCacheListaDoble *elem = (tElemCacheListaDoble*) nodoLista->dato;
+    if(elem){
+        free(elem->clave);
+        free(elem->dato);
+        free(elem);
+    }
+
+    free(nodoLista);
+
+    cache->ce--;
+
+    return 1;
+
+}
 ///PRIMITIVAS LISTA DOBLE
 
 void crearListaDoble(tListaDoble *pl)

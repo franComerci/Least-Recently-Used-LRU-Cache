@@ -69,3 +69,54 @@
 	<string.h>
 	"../comun.h"
 
+1793285305 source:c:\algoritmos_tp\least-recently-used-lru-cache\lru_cache\comun.c
+	"comun.h"
+
+1793285305 c:\algoritmos_tp\least-recently-used-lru-cache\lru_cache\comun.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1793285305 source:c:\algoritmos_tp\least-recently-used-lru-cache\lru_cache\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"TDA_Cache_Lista_Simple/TDA_Cache_Lista.h"
+	"Utilitiarias.h"
+	"comun.h"
+
+1793285305 c:\algoritmos_tp\least-recently-used-lru-cache\lru_cache\tda_cache_lista_simple\tda_cache_lista.h
+	"../TDA_LISTA/TDA_Lista.h"
+	"../comun.h"
+
+1793285305 c:\algoritmos_tp\least-recently-used-lru-cache\lru_cache\tda_lista\tda_lista.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1793285305 c:\algoritmos_tp\least-recently-used-lru-cache\lru_cache\utilitiarias.h
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<stdbool.h>
+	"TDA_Cache_Lista_Simple/TDA_Cache_Lista.h"
+
+1793285305 source:c:\algoritmos_tp\least-recently-used-lru-cache\lru_cache\tda_arbol\tda_arbol.c
+	"TDA_ARBOL.h"
+
+1793285305 c:\algoritmos_tp\least-recently-used-lru-cache\lru_cache\tda_arbol\tda_arbol.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../comun.h"
+
+1793285305 source:c:\algoritmos_tp\least-recently-used-lru-cache\lru_cache\tda_cache_lista_simple\tda_cache_lista.c
+	"TDA_Cache_Lista.h"
+
+1793285305 source:c:\algoritmos_tp\least-recently-used-lru-cache\lru_cache\tda_lista\tda_lista.c
+	"TDA_Lista.h"
+
+1793285305 source:c:\algoritmos_tp\least-recently-used-lru-cache\lru_cache\utilitarias.c
+	"comun.h"
+	"Utilitiarias.h"
+
