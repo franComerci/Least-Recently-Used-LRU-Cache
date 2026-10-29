@@ -1,4 +1,5 @@
 #include "TDA_ARBOL.h"
+
 void crearArbol(tArbol *pa)
 {
     *pa = NULL;

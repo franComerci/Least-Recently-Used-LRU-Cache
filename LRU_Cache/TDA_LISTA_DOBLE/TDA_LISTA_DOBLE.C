@@ -1,4 +1,5 @@
 #include "TDA_LISTA_DOBLE.h"
+#include "../TDA_ARBOL/TDA_ARBOL.h"
 ///FUNCIONES DE CACHE CON LISTA DOBLE
 
 void crearLruCacheListaDobleyArbol(tCacheListaDoble *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp)
@@ -12,68 +13,65 @@ void crearLruCacheListaDobleyArbol(tCacheListaDoble *cache, size_t maxCap, size_
     cache->ce = 0;
 }
 
-int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, const void *dato)
-{
-    if (cache->ce >= cache->cap)
-    {
-        // Eliminar el elemento menos recientemente usado (LRU)
-        tElemCacheListaDoble lru;
-        if (obtenerLruCacheListaDoble(cache, NULL, &lru) == 0)
-        {
-            eliminarLruCacheListaDoble(cache, lru.clave);
-        
-            cache->ce--;
-        }
-    }
-
-    // Insertar el nuevo elemento en la lista
-    if (insertarOrdenadoDoble(&cache->listaDoble, dato, sizeof(tElemCacheListaDoble), cache->cmp) == 0 && insertarordenadoArbol(&cache->arbol, clave, dato, cache->tamClave, cache->tamDato, cache->cmp) == 0)
-    {
-        cache->ce++;
-        return 0; // Éxito
-    }
-    return 1; // Error al insertar
-}
-
 int obtenerLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, void *dato)
 {
-    
-    tNodo *nodo = cache->listaDoble;
-    // Buscar el nodo con la clave especificada
-    while (nodo)
+    tElemCacheListaDoble aux;
+    aux.clave = (void *)clave;//ya tengo la clave del nodo
+
+    tNodo2 nodoAux;
+    nodoAux.dato = &aux;
+    tNodo2 *ptrNodo = &nodoAux;//puntero q apunta a la clave
+
+    tArbol *nodoArbol = buscarClave(&cache->arbol, cache->cmp, &ptrNodo);//me devuelve el nodo en el arbol
+
+    if(nodoArbol && *nodoArbol)
     {
-        tElemCacheListaDoble *elem = (tElemCacheListaDoble *)nodo->dato;
-        if (cache->cmp(elem->clave, clave) == 0)
+        tNodo2 *nodoLista;
+        memcpy(&nodoLista, (*nodoArbol)->dato, sizeof(tNodo2 *));
+
+        if(cache->listaDoble != nodoLista)//distintas posiciones en memoria
         {
-            // Copiar el dato al puntero proporcionado
-            memcpy(dato, elem, sizeof(tElemCacheListaDoble));
-            return 0; // Éxito
+            if(nodoLista->ant)//si existe un nodo antes tengo que enlazarlo con el siguiente, porque saco al del medio
+                nodoLista->ant->sig = nodoLista->sig;
+            if(nodoLista->sig)//lo mismo que antes pero al reves
+                nodoLista->sig->ant = nodoLista->ant;
+
+            nodoLista->sig = cache->listaDoble;//hago que el que se obtiene ahora apunte al inicio de la cache
+            nodoLista->ant = NULL;
+
+            if(cache->listaDoble)//no esta vacia
+                cache->listaDoble->ant = nodoLista;//muevo a segunda posicion
+
+            cache->listaDoble = nodoLista;//ahora es el inicio de la lista
         }
-        nodo = nodo->sig;
+
+        tElemCacheListaDoble *elem = (tElemCacheListaDoble *)nodoLista->dato;
+        memcpy(dato, elem->dato, cache->tamDato);
+        return 1;
     }
-    return 1; // No se encontró la clave
+
+    return 0;
 }
 
-int borrarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave)
+
+int vaciarLruCacheListaDobleyArbol(tCacheListaDoble *cache)
 {
-    tNodo *nodo = cache->listaDoble;
+    tNodo2 *actual = cache->listaDoble;
 
-    // Buscar el nodo con la clave especificada
-    while (nodo)
+    while(actual)
     {
-        tElemCacheListaDoble *elem = (tElemCacheListaDoble *)nodo->dato;
-        if (cache->cmp(elem->clave, clave) == 0)
-        {
-            // Eliminar el nodo de la lista
-            eliminarNodoDoble(&cache->listaDoble, elem, sizeof(tElemCacheListaDoble), cache->cmp);
-            cache->ce--;
-            return 0; // Éxito
-        }
-        nodo = nodo->sig;
+        tElemCacheListaDoble *elem = (tElemCacheListaDoble *)actual->dato;
+        free(elem->clave);
+        free(elem->dato);
+        actual = actual->sig;
     }
-    return 1; // No se encontró la clave
-}
+    vaciarListaDoble(&cache->listaDoble);
+    vaciarArbol(&cache->arbol);
 
+    cache->ce = 0;
+
+    return 1;
+}
 
 
 ///PRIMITIVAS LISTA DOBLE
@@ -85,8 +83,8 @@ void crearListaDoble(tListaDoble *pl)
 
 int insertarOrdenadoDoble(tListaDoble *pl, const void *dato, unsigned tam, Cmp comparar)
 {
-    tNodo *nue, *act;
-    tNodo *auxAnt = NULL, *auxSig = NULL;
+    tNodo2 *nue, *act;
+    tNodo2 *auxAnt = NULL, *auxSig = NULL;
     int cmp;
 
     if (*pl)
@@ -116,7 +114,7 @@ int insertarOrdenadoDoble(tListaDoble *pl, const void *dato, unsigned tam, Cmp c
         }
     }
 
-    nue = (tNodo *)malloc(sizeof(tNodo));
+    nue = (tNodo2 *)malloc(sizeof(tNodo2));
     if (!nue)
         return 1;
 
@@ -143,7 +141,7 @@ int insertarOrdenadoDoble(tListaDoble *pl, const void *dato, unsigned tam, Cmp c
 
 int eliminarNodoDoble(tListaDoble *pl, void *dato, unsigned tam, Cmp comparar)
 {
-    tNodo *elim, *auxAnt, *auxSig;
+    tNodo2 *elim, *auxAnt, *auxSig;
 
     if (!*pl)
         return 1;
@@ -175,7 +173,7 @@ int eliminarNodoDoble(tListaDoble *pl, void *dato, unsigned tam, Cmp comparar)
 
 int listaLlenaDoble(const tListaDoble *pl, unsigned tam)
 {
-    void *nodo = malloc(sizeof(tNodo));
+    void *nodo = malloc(sizeof(tNodo2));
     void *dato = malloc(tam);
     int llena = (nodo == NULL || dato == NULL);
 
@@ -191,7 +189,7 @@ int listaVaciaDoble(const tListaDoble *pl)
 
 void vaciarListaDoble(tListaDoble *pl)
 {
-    tNodo *elim;
+    tNodo2 *elim;
 
     if (!*pl)
         return;

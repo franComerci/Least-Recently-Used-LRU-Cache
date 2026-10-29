@@ -20,10 +20,10 @@
 	<stdlib.h>
 	<string.h>
 
-1793052057 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista\tda_lista.c
+1793054443 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista\tda_lista.c
 	"TDA_Lista.h"
 
-1793052089 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_cache_lista_simple\tda_cache_lista.c
+1793054443 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_cache_lista_simple\tda_cache_lista.c
 	"TDA_Cache_Lista.h"
 
 1793051225 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_cache_lista_simple\tda_cache_lista.h
@@ -33,7 +33,7 @@
 1793052097 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\comun.c
 	"comun.h"
 
-1793051733 c:\users\admin\desktop\algoritmos\tp\lru_cache\comun.h
+1793119950 c:\users\admin\desktop\algoritmos\tp\lru_cache\comun.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -45,14 +45,27 @@
 	<stdbool.h>
 	"TDA_Cache_Lista_Simple/TDA_Cache_Lista.h"
 
-1793051790 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_arbol\tda_arbol.c
+1793122061 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_arbol\tda_arbol.c
+	"TDA_ARBOL.h"
 
-1793051158 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista_doble\tda_lista_doble.c
+1793122050 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista_doble\tda_lista_doble.c
 	"TDA_LISTA_DOBLE.h"
+	"../TDA_ARBOL/TDA_ARBOL.h"
 
-1793051158 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista_doble\tda_lista_doble.h
+1793121428 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista_doble\tda_lista_doble.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../comun.h"
+	"../TDA_ARBOL/TDA_ARBOL.h"
 
 1793052087 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\utilitarias.c
 	"comun.h"
 	"Utilitiarias.h"
+
+1793052318 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_arbol\tda_arbol.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../comun.h"
 
