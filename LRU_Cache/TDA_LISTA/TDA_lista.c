@@ -12,7 +12,7 @@ int listaVacia(const tLista *pl)
 
 int listaLlena(const tLista *pl, size_t cantBytes)
 {
-    tNodo *aux = (tNodo *)malloc(sizeof(tNodo));
+    tNodo1 *aux = (tNodo1 *)malloc(sizeof(tNodo1));
     void *info = malloc(cantBytes);
 
     free(aux);
@@ -25,7 +25,7 @@ void vaciarLista(tLista *pl)
 {
     while(*pl)
     {
-        tNodo *aux = *pl;
+        tNodo1 *aux = *pl;
         *pl = aux->sig;
         free(aux->info); //voy liberando al anterior de pl en escalerita
         free(aux);
@@ -34,8 +34,8 @@ void vaciarLista(tLista *pl)
 
 int ponerPrimeroLista(tLista *pl, const void *pd, size_t cantBytes)
 {
-    tNodo *nuevo;
-    if((nuevo = (tNodo *)malloc(sizeof(tNodo))) == NULL ||
+    tNodo1 *nuevo;
+    if((nuevo = (tNodo1 *)malloc(sizeof(tNodo1))) == NULL ||
        (nuevo->info = malloc(cantBytes)) == NULL)//valido que info y nuevo se carguen dinamicamente bien
     {
         free(nuevo);
@@ -52,7 +52,7 @@ int ponerPrimeroLista(tLista *pl, const void *pd, size_t cantBytes)
 
 int sacarPrimeroLista(tLista *pl, void *pd, size_t cantBytes)
 {
-    tNodo *aux = *pl;
+    tNodo1 *aux = *pl;
 
     if(!aux)
         return 0;
@@ -76,12 +76,12 @@ int verPrimeroLista(tLista *pl, void *pd, size_t cantBytes)
 
 int ponerUltimoLista(tLista *pl, const void *pd, size_t cantBytes)
 {
-    tNodo *nuevo;
+    tNodo1 *nuevo;
 
     while(*pl)
         pl = &(*pl)->sig;//recorro hasta que llego a NULL
 
-    if((nuevo = (tNodo *)malloc(sizeof(tNodo))) == NULL ||
+    if((nuevo = (tNodo1 *)malloc(sizeof(tNodo1))) == NULL ||
        (nuevo->info = malloc(cantBytes)) == NULL)//valido que info y nuevo se carguen dinamicamente bien
     {
         free(nuevo);

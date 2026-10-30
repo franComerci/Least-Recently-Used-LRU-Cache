@@ -38,6 +38,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="TDA_ARBOL/TDA_ARBOL.h" />
+		<Unit filename="TDA_CACHE_OPTIMIZADA/TDA_CACHE_OPTIMIZADA.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="TDA_CACHE_OPTIMIZADA/TDA_CACHE_OPTIMIZADA.h" />
 		<Unit filename="TDA_Cache_Lista_Simple/TDA_Cache_Lista.c">
 			<Option compilerVar="CC" />
 		</Unit>

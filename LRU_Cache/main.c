@@ -6,114 +6,147 @@
 //
 //    return 0;
 //}
-
-///prueba gemini archivos
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include "TDA_CACHE_OPTIMIZADA/TDA_CACHE_OPTIMIZADA.h"
-
-typedef int tClave;
-typedef struct {
-    char info[20];
-} tDato;
-
-int compararClaves(const void *a, const void *b)
-{
-    tNodo2 *nodoA = *(tNodo2 **)a;
-    tNodo2 *nodoB = *(tNodo2 **)b;
-    tElemCacheListaDoble *elemA = (tElemCacheListaDoble *)nodoA->dato;
-    tElemCacheListaDoble *elemB = (tElemCacheListaDoble *)nodoB->dato;
-    return *(int *)elemA->clave - *(int *)elemB->clave;
-}
-
-// 1. Genera un archivo con 2 millones de claves aleatorias (pero repetidas)
-void generarArchivoPrueba(const char *nombreArchivo, int cantidadLineas, int maxClave)
-{
-    FILE *pf = fopen(nombreArchivo, "wt");
-    if (!pf) return;
-
-    printf("Generando archivo de %d de lineas...\n", cantidadLineas);
-    srand(time(NULL));
-    for (int i = 0; i < cantidadLineas; i++)
-    {
-        // Genera claves entre 1 y maxClave para forzar colisiones y uso de caché
-        int claveAleatoria = (rand() % maxClave) + 1;
-        fprintf(pf, "%d\n", claveAleatoria);
-    }
-    fclose(pf);
-    printf("Archivo generado exitosamente.\n\n");
-}
-
+//
+#include "Tweener/Tweener.h"
 int main()
 {
-    const char *nombreArchivo = "millones_datos.txt";
-    int totalConsultas = 5000000;
-    int clavesDistintas = 50000; // Total de datos posibles
-    int capacidadCache = 10000;  // La caché solo puede guardar el 20% de los datos
+    const char *archivoPosteos = "posteos.dat";
+    const char *archivoUsuarios = "usuarios.dat";
+    unsigned int semilla = 12345;
+    int totalPosteosBD = 50000000; // 500.000 posteos
 
-    // Generar el archivo (se hace rápido)
-    generarArchivoPrueba(nombreArchivo, totalConsultas, clavesDistintas);
+    printf("Generando base de datos binaria de %d posteos...\n", totalPosteosBD);
+    generarPosteos(archivoPosteos, totalPosteosBD);
 
-    FILE *pf = fopen(nombreArchivo, "rt");
-    if (!pf) {
-        printf("Error al abrir el archivo.\n");
-        return 1;
-    }
+    const char* nombresLotes[] = {"", "LOTE CONCENTRADO", "LOTE DISPERSO", "LOTE ORDENADO"};
 
-    tCacheListaDoble miCache;
-    crearLruCacheListaDobleyArbol(&miCache, capacidadCache, sizeof(tClave), sizeof(tDato), compararClaves);
-
-    tClave claveActual;
-    tDato datoActual;
-    strcpy(datoActual.info, "Dato simulado");
-
-    int hits = 0;
-    int misses = 0;
-
-    printf("Iniciando procesamiento de %d de consultas...\n", totalConsultas);
-
-    // 2. Iniciamos el cronómetro
-    clock_t inicio = clock();
-
-    // 3. Leemos línea por línea y usamos la caché
-    while (fscanf(pf, "%d", &claveActual) == 1)
+    for (int tipoLote = 1; tipoLote <= 3; tipoLote++)
     {
-        tDato datoObtenido;
+        printf("\n=========================================================\n");
+        printf(" ESCENARIO %d: %s\n", tipoLote, nombresLotes[tipoLote]);
+        printf("=========================================================\n");
 
-        // Intentamos obtenerlo de la caché (Hit)
-        if (obtenerLruCacheListaDobleyArbol(&miCache, &claveActual, &datoObtenido))
-        {
-            hits++;
-        }
-        else // No estaba en caché (Miss) -> Simulamos ir a buscarlo y lo agregamos
-        {
-            misses++;
-            agregarLruCacheListaDobleyArbol(&miCache, &claveActual, &datoActual);
-        }
+        generarUsuarios(archivoUsuarios, semilla, tipoLote, totalPosteosBD);
+
+        // 1. Prueba Sin Caché
+        ejecutarSimulacion(archivoUsuarios, archivoPosteos, 0, 0);
+
+        // 2. Prueba Con Caché Chica (Capacidad: 100) - Parte 2
+        ejecutarSimulacion(archivoUsuarios, archivoPosteos, 100, 2);
+
+        // 3. Prueba Con Caché Grande (Capacidad: 10000) - Parte 2
+        ejecutarSimulacion(archivoUsuarios, archivoPosteos, 10000, 2);
     }
-
-    // 4. Frenamos el cronómetro
-    clock_t fin = clock();
-    double tiempoConsumido = (double)(fin - inicio) / CLOCKS_PER_SEC;
-
-    fclose(pf);
-    vaciarLruCacheListaDobleyArbol(&miCache);
-
-    // 5. Imprimimos las estadísticas
-    printf("==========================================\n");
-    printf("RESULTADOS DEL BENCHMARK\n");
-    printf("==========================================\n");
-    printf("Tiempo total    : %.3f segundos\n", tiempoConsumido);
-    printf("Aciertos (Hits) : %d\n", hits);
-    printf("Fallos (Misses) : %d\n", misses);
-    printf("Hit Rate        : %.2f %%\n", (float)hits / totalConsultas * 100);
-    printf("==========================================\n");
 
     return 0;
 }
-
+/////prueba gemini archivos
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <string.h>
+//#include <time.h>
+//#include "TDA_CACHE_OPTIMIZADA/TDA_CACHE_OPTIMIZADA.h"
+//
+//typedef int tClave;
+//typedef struct {
+//    char info[20];
+//} tDato;
+//
+//int compararClaves(const void *a, const void *b)
+//{
+//    tNodo2 *nodoA = *(tNodo2 **)a;
+//    tNodo2 *nodoB = *(tNodo2 **)b;
+//    tElemCacheListaDoble *elemA = (tElemCacheListaDoble *)nodoA->dato;
+//    tElemCacheListaDoble *elemB = (tElemCacheListaDoble *)nodoB->dato;
+//    return *(int *)elemA->clave - *(int *)elemB->clave;
+//}
+//
+//// 1. Genera un archivo con 2 millones de claves aleatorias (pero repetidas)
+//void generarArchivoPrueba(const char *nombreArchivo, int cantidadLineas, int maxClave)
+//{
+//    FILE *pf = fopen(nombreArchivo, "wt");
+//    if (!pf) return;
+//
+//    printf("Generando archivo de %d de lineas...\n", cantidadLineas);
+//    srand(time(NULL));
+//    for (int i = 0; i < cantidadLineas; i++)
+//    {
+//        // Genera claves entre 1 y maxClave para forzar colisiones y uso de caché
+//        int claveAleatoria = (rand() % maxClave) + 1;
+//        fprintf(pf, "%d\n", claveAleatoria);
+//    }
+//    fclose(pf);
+//    printf("Archivo generado exitosamente.\n\n");
+//}
+//
+//int main()
+//{
+//    const char *nombreArchivo = "millones_datos.txt";
+//    int totalConsultas = 5000000;
+//    int clavesDistintas = 50000; // Total de datos posibles
+//    int capacidadCache = 10000;  // La caché solo puede guardar el 20% de los datos
+//
+//    // Generar el archivo (se hace rápido)
+//    generarArchivoPrueba(nombreArchivo, totalConsultas, clavesDistintas);
+//
+//    FILE *pf = fopen(nombreArchivo, "rt");
+//    if (!pf) {
+//        printf("Error al abrir el archivo.\n");
+//        return 1;
+//    }
+//
+//    tCacheListaDoble miCache;
+//    crearLruCacheListaDobleyArbol(&miCache, capacidadCache, sizeof(tClave), sizeof(tDato), compararClaves);
+//
+//    tClave claveActual;
+//    tDato datoActual;
+//    strcpy(datoActual.info, "Dato simulado");
+//
+//    int hits = 0;
+//    int misses = 0;
+//
+//    printf("Iniciando procesamiento de %d de consultas...\n", totalConsultas);
+//
+//    // 2. Iniciamos el cronómetro
+//    clock_t inicio = clock();
+//
+//    // 3. Leemos línea por línea y usamos la caché
+//    while (fscanf(pf, "%d", &claveActual) == 1)
+//    {
+//        tDato datoObtenido;
+//
+//        // Intentamos obtenerlo de la caché (Hit)
+//        if (obtenerLruCacheListaDobleyArbol(&miCache, &claveActual, &datoObtenido))
+//        {
+//            hits++;
+//        }
+//        else // No estaba en caché (Miss) -> Simulamos ir a buscarlo y lo agregamos
+//        {
+//            misses++;
+//            agregarLruCacheListaDobleyArbol(&miCache, &claveActual, &datoActual);
+//        }
+//    }
+//
+//    // 4. Frenamos el cronómetro
+//    clock_t fin = clock();
+//    double tiempoConsumido = (double)(fin - inicio) / CLOCKS_PER_SEC;
+//
+//    fclose(pf);
+//    vaciarLruCacheListaDobleyArbol(&miCache);
+//
+//    // 5. Imprimimos las estadísticas
+//    printf("==========================================\n");
+//    printf("RESULTADOS DEL BENCHMARK\n");
+//    printf("==========================================\n");
+//    printf("Tiempo total    : %.3f segundos\n", tiempoConsumido);
+//    printf("Aciertos (Hits) : %d\n", hits);
+//    printf("Fallos (Misses) : %d\n", misses);
+//    printf("Hit Rate        : %.2f %%\n", (float)hits / totalConsultas * 100);
+//    printf("==========================================\n");
+//
+//    return 0;
+//}
+//
 
 //#include <stdio.h>
 //#include <stdlib.h>

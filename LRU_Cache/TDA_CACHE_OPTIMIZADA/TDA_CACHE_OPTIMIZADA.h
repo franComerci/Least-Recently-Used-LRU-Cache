@@ -8,8 +8,5 @@ int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, 
 int obtenerLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, void *dato);
 int borrarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave);
 int vaciarLruCacheListaDobleyArbol(tCacheListaDoble *cache);
-int destruirLruCacheListaDobleyArbol(tCacheListaDoble *cache);
-int cacheListaDobleLlenayArbol(const tCacheListaDoble *cache);
-int cacheListaDobleVaciayArbol(const tCacheListaDoble *cache);
 
 #endif // TDA_CACHE_OPTIMIZADA_H_INCLUDED
