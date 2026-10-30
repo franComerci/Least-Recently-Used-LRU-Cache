@@ -37,17 +37,17 @@ int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, 
         //la consigna me dice que lo tengo q traer al principio
         if(cache->listaDoble != nodoLista)
         {
-            // 1. Si era el último, actualizamos la cola
+            // 1. Si era el ï¿½ltimo, actualizamos la cola
             if(cache->ultNodo == nodoLista)
                 cache->ultNodo = nodoLista->ant;
 
-            // 2. Conectamos a los vecinos entre sí para cerrar el hueco
+            // 2. Conectamos a los vecinos entre sï¿½ para cerrar el hueco
             if(nodoLista->ant)
                 nodoLista->ant->sig = nodoLista->sig;
             if(nodoLista->sig)
                 nodoLista->sig->ant = nodoLista->ant;
 
-            // 3. Lo llevamos al principio (esto ya lo tenías bien)
+            // 3. Lo llevamos al principio (esto ya lo tenï¿½as bien)
             nodoLista->sig = cache->listaDoble;
             nodoLista->ant = NULL;
 
@@ -84,7 +84,7 @@ int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, 
 
             if(ultimo->ant)//conecto el ultimo
                 ultimo->ant->sig = NULL;
-            else//si ant es null, significa q la lista está vacía
+            else//si ant es null, significa q la lista estï¿½ vacï¿½a
                 cache->listaDoble = NULL;
 
             free(elemUlt->clave);
@@ -109,7 +109,20 @@ int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, 
     }
 
     elemNuevo->clave = malloc(cache->tamClave);
+    if(!elemNuevo->clave)
+    {
+        free(nuevo);
+        free(elemNuevo);
+        return 0;
+    }
     elemNuevo->dato = malloc(cache->tamDato);
+    if(!elemNuevo->dato)
+    {
+        free(nuevo);
+        free(elemNuevo->clave);
+        free(elemNuevo);
+        return 0;
+    }
 
     memcpy(elemNuevo->clave, clave, cache->tamClave);
     memcpy(elemNuevo->dato, dato, cache->tamDato);
