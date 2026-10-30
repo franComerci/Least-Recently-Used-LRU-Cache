@@ -10,8 +10,130 @@ void crearLruCacheListaDobleyArbol(tCacheListaDoble *cache, size_t maxCap, size_
     cache->cmp = cmp;
     crearListaDoble(&cache->listaDoble);
     crearArbol(&cache->arbol);
+    cache->ultNodo = NULL;
     cache->ce = 0;
 }
+
+int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, const void *dato)
+{
+    tElemCacheListaDoble aux;
+    aux.clave = (void *)clave;//ya tengo la clave del nodo
+
+    tNodo2 nodoAux;
+    nodoAux.dato = &aux;
+    tNodo2 *ptrNodo = &nodoAux;//puntero q apunta a la clave
+
+    tArbol *nodoArbol = buscarClave(&cache->arbol, cache->cmp, &ptrNodo);//me devuelve el nodo en el arbol
+    //veo si el nodo ya existe
+    if(nodoArbol && *nodoArbol)
+    {
+        tNodo2 *nodoLista;
+        memcpy(&nodoLista, (*nodoArbol)->dato, sizeof(tNodo2 *));
+
+        tElemCacheListaDoble *elem = (tElemCacheListaDoble *)nodoLista->dato;
+        memcpy(elem->dato, dato, cache->tamDato);//actializo dato con el que me llega por parametro
+
+        //la consigna me dice que lo tengo q traer al principio
+        //la consigna me dice que lo tengo q traer al principio
+        if(cache->listaDoble != nodoLista)
+        {
+            // 1. Si era el último, actualizamos la cola
+            if(cache->ultNodo == nodoLista)
+                cache->ultNodo = nodoLista->ant;
+
+            // 2. Conectamos a los vecinos entre sí para cerrar el hueco
+            if(nodoLista->ant)
+                nodoLista->ant->sig = nodoLista->sig;
+            if(nodoLista->sig)
+                nodoLista->sig->ant = nodoLista->ant;
+
+            // 3. Lo llevamos al principio (esto ya lo tenías bien)
+            nodoLista->sig = cache->listaDoble;
+            nodoLista->ant = NULL;
+
+            if(cache->listaDoble)
+                cache->listaDoble->ant = nodoLista;
+
+            cache->listaDoble = nodoLista;
+        }
+        return 1;
+    }
+
+    //veo si esta llena la cache
+    if(cache->ce == cache->cap)
+    {
+        tNodo2 *ultimo = cache->ultNodo;//arranco desde el principio
+
+        if(ultimo)
+        {
+//            while(ultimo->sig)//recorro hasta que sig sea distinto de NULL
+//                ultimo = ultimo->sig;
+
+            tElemCacheListaDoble *elemUlt = (tElemCacheListaDoble *)ultimo->dato;
+
+            tElemCacheListaDoble auxBorrar; //tengo que borrar el ultimo por la consigna
+            auxBorrar.clave = elemUlt->clave;
+            tNodo2 nodoBorrar;
+            nodoBorrar.dato = &auxBorrar;
+
+            tNodo2 *ptrBorrar = &nodoBorrar;
+
+            eliminarNodo(&cache->arbol, &ptrBorrar, sizeof(tNodo2 *), cache->cmp);
+
+            cache->ultNodo = ultimo->ant;
+
+            if(ultimo->ant)//conecto el ultimo
+                ultimo->ant->sig = NULL;
+            else//si ant es null, significa q la lista está vacía
+                cache->listaDoble = NULL;
+
+            free(elemUlt->clave);
+            free(elemUlt->dato);
+            free(ultimo->dato);
+            free(ultimo);
+
+            cache->ce--;
+        }
+    }
+    //ahora tengo que meter el nuevo dato
+    tNodo2 *nuevo = (tNodo2 *)malloc(sizeof(tNodo2));
+    if(!nuevo)
+        return 0;
+
+    tElemCacheListaDoble *elemNuevo = (tElemCacheListaDoble *)malloc(sizeof(tElemCacheListaDoble));
+
+    if(!elemNuevo)
+    {
+        free(nuevo);
+        return 0;
+    }
+
+    elemNuevo->clave = malloc(cache->tamClave);
+    elemNuevo->dato = malloc(cache->tamDato);
+
+    memcpy(elemNuevo->clave, clave, cache->tamClave);
+    memcpy(elemNuevo->dato, dato, cache->tamDato);
+
+    nuevo->dato = elemNuevo;
+    nuevo->tam = sizeof(tElemCacheListaDoble);
+    //el nuevo nodo tiene que ser el primero porq es el ultimo que entro
+    nuevo->ant = NULL;
+    nuevo->sig = cache->listaDoble;
+
+    if(cache->listaDoble)
+        cache->listaDoble->ant = nuevo;
+    else
+        cache->ultNodo = nuevo;
+
+    cache->listaDoble = nuevo;
+    //lo tengo que guardar en el arbol
+    insertarOrdenado(&cache->arbol, &nuevo, sizeof(tNodo2 *), cache->cmp);
+
+    cache->ce++;
+
+    return 1;
+}
+
 
 int obtenerLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, void *dato)
 {
@@ -31,6 +153,9 @@ int obtenerLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, 
 
         if(cache->listaDoble != nodoLista)//distintas posiciones en memoria
         {
+            if(cache->ultNodo == nodoLista)
+                cache->ultNodo = nodoLista->ant;
+
             if(nodoLista->ant)//si existe un nodo antes tengo que enlazarlo con el siguiente, porque saco al del medio
                 nodoLista->ant->sig = nodoLista->sig;
             if(nodoLista->sig)//lo mismo que antes pero al reves
@@ -110,6 +235,8 @@ int borrarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave){
         free(elem);
     }
 
+    if(cache->ultNodo == nodoLista)
+        cache->ultNodo = nodoLista->ant;
     free(nodoLista);
 
     cache->ce--;

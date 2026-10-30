@@ -1,11 +1,10 @@
 # depslib dependency file v1.0
-1793052149 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\main.c
+1793320903 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
-	"TDA_Cache_Lista_Simple/TDA_Cache_Lista.h"
-	"Utilitiarias.h"
-	"comun.h"
+	<time.h>
+	"TDA_LISTA_DOBLE/TDA_LISTA_DOBLE.h"
 
 1792957323 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista.h
 	<stdio.h>
@@ -33,7 +32,7 @@
 1793052097 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\comun.c
 	"comun.h"
 
-1793119950 c:\users\admin\desktop\algoritmos\tp\lru_cache\comun.h
+1793316763 c:\users\admin\desktop\algoritmos\tp\lru_cache\comun.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -45,14 +44,14 @@
 	<stdbool.h>
 	"TDA_Cache_Lista_Simple/TDA_Cache_Lista.h"
 
-1793122061 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_arbol\tda_arbol.c
+1793316763 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_arbol\tda_arbol.c
 	"TDA_ARBOL.h"
 
-1793122050 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista_doble\tda_lista_doble.c
+1793322993 source:c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista_doble\tda_lista_doble.c
 	"TDA_LISTA_DOBLE.h"
 	"../TDA_ARBOL/TDA_ARBOL.h"
 
-1793121428 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista_doble\tda_lista_doble.h
+1793322251 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_lista_doble\tda_lista_doble.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -63,7 +62,7 @@
 	"comun.h"
 	"Utilitiarias.h"
 
-1793052318 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_arbol\tda_arbol.h
+1793319547 c:\users\admin\desktop\algoritmos\tp\lru_cache\tda_arbol\tda_arbol.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

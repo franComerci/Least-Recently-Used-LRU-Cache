@@ -19,6 +19,7 @@ typedef struct
 {
     tListaDoble listaDoble;
     tArbol arbol;
+    tNodo2 *ultNodo;
     int cap;
     int ce;
     size_t tamClave;
@@ -45,7 +46,7 @@ void eliminarNodoDobleArbol(tListaDoble *pl, tNodo2 *nodo);
 
 ///FUNCIONES DE CACHE CON LISTA DOBLE
 void crearLruCacheListaDobleyArbol(tCacheListaDoble *cache, size_t maxCap, size_t tamClave, size_t tamDato, Cmp cmp);
-int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, tElemCacheListaDoble *dato);
+int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, const void *dato);
 int obtenerLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, void *dato);
 int borrarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave);
 int vaciarLruCacheListaDobleyArbol(tCacheListaDoble *cache);
