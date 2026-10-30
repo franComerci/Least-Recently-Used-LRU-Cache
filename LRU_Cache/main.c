@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "TDA_LISTA_DOBLE/TDA_LISTA_DOBLE.h" // Ajustá tu ruta
+#include "TDA_CACHE_OPTIMIZADA/TDA_CACHE_OPTIMIZADA.h"
 
 typedef int tClave;
 typedef struct {
