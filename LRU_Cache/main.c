@@ -21,11 +21,13 @@ typedef struct {
 
 int compararClaves(const void *a, const void *b)
 {
-    tNodo2 *nodoA = *(tNodo2 **)a;
-    tNodo2 *nodoB = *(tNodo2 **)b;
-    tElemCacheListaDoble *elemA = (tElemCacheListaDoble *)nodoA->dato;
-    tElemCacheListaDoble *elemB = (tElemCacheListaDoble *)nodoB->dato;
-    return *(int *)elemA->clave - *(int *)elemB->clave;
+//    tNodo2 *nodoA = *(tNodo2 **)a;
+//    tNodo2 *nodoB = *(tNodo2 **)b;
+//    tElemCacheListaDoble *elemA = (tElemCacheListaDoble *)nodoA->dato;
+//    tElemCacheListaDoble *elemB = (tElemCacheListaDoble *)nodoB->dato;
+//    return *(int *)elemA->clave - *(int *)elemB->clave;
+
+    return *(const int*)a - *(const int*)b;
 }
 
 // 1. Genera un archivo con 2 millones de claves aleatorias (pero repetidas)
@@ -54,7 +56,7 @@ int main()
     int capacidadCache = 10000;  // La caché solo puede guardar el 20% de los datos
 
     // Generar el archivo (se hace rápido)
-    generarArchivoPrueba(nombreArchivo, totalConsultas, clavesDistintas);
+    //generarArchivoPrueba(nombreArchivo, totalConsultas, clavesDistintas);
 
     FILE *pf = fopen(nombreArchivo, "rt");
     if (!pf) {
