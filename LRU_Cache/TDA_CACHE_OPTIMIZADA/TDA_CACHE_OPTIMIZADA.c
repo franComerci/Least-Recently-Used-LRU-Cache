@@ -37,17 +37,17 @@ int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, 
         //la consigna me dice que lo tengo q traer al principio
         if(cache->listaDoble != nodoLista)
         {
-            // 1. Si era el �ltimo, actualizamos la cola
+            // 1. Si era el ultimo, actualizamos la cola
             if(cache->ultNodo == nodoLista)
                 cache->ultNodo = nodoLista->ant;
 
-            // 2. Conectamos a los vecinos entre s� para cerrar el hueco
+            // 2. Conectamos a los vecinos entre si para cerrar el hueco
             if(nodoLista->ant)
                 nodoLista->ant->sig = nodoLista->sig;
             if(nodoLista->sig)
                 nodoLista->sig->ant = nodoLista->ant;
 
-            // 3. Lo llevamos al principio (esto ya lo ten�as bien)
+            // 3. Lo llevamos al principio (esto ya lo tenias bien)
             nodoLista->sig = cache->listaDoble;
             nodoLista->ant = NULL;
 
@@ -84,7 +84,7 @@ int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, 
 
             if(ultimo->ant)//conecto el ultimo
                 ultimo->ant->sig = NULL;
-            else//si ant es null, significa q la lista est� vac�a
+            else//si ant es null, significa q la lista esta vacia
                 cache->listaDoble = NULL;
 
             free(elemUlt->clave);
@@ -206,6 +206,7 @@ int vaciarLruCacheListaDobleyArbol(tCacheListaDoble *cache)
     vaciarListaDoble(&cache->listaDoble);
     vaciarArbol(&cache->arbol);
 
+    cache->ultNodo = NULL;
     cache->ce = 0;
 
     return 1;
@@ -256,4 +257,12 @@ int borrarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave){
 
     return 1;
 
+}
+
+int alturaIndiceLruCacheListaDobleyArbol(const tCacheListaDoble *cache)
+{
+    if(!cache)
+        return 0;
+
+    return alturaArbol(&cache->arbol);
 }

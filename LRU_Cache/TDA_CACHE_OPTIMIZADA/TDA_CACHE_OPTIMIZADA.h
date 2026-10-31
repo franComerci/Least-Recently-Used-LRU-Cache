@@ -11,5 +11,5 @@ int vaciarLruCacheListaDobleyArbol(tCacheListaDoble *cache);
 int destruirLruCacheListaDobleyArbol(tCacheListaDoble *cache);
 int cacheListaDobleLlenayArbol(const tCacheListaDoble *cache);
 int cacheListaDobleVaciayArbol(const tCacheListaDoble *cache);
-
+int alturaIndiceLruCacheListaDobleyArbol(const tCacheListaDoble *cache);
 #endif // TDA_CACHE_OPTIMIZADA_H_INCLUDED
