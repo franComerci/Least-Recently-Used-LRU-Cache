@@ -8,11 +8,11 @@ void crearArbol(tArbol *pa)
 int insertarOrdenado(tArbol *pa, void *dato, unsigned tam, Cmp comparar)
 {
     int cmp;
-    tNodo *nue;
+    tNodoArbol *nue;
 
     if (!*pa)
     {
-        nue = (tNodo *)malloc(sizeof(tNodo));
+        nue = (tNodoArbol *)malloc(sizeof(tNodoArbol));
         if (!nue)
             return 1;
 
@@ -73,7 +73,7 @@ void intercambio(tArbol *elim, tArbol *paR)
 int eliminarNodo(tArbol *pa, void *dato, unsigned tam, Cmp comparar)
 {
     tArbol *elim, *paR;
-    tNodo *nodoAEliminar;
+    tNodoArbol *nodoAEliminar;
     int izq, der;
 
     elim = buscarClave(pa, comparar, dato);
@@ -127,7 +127,7 @@ int arbolVacio(const tArbol *pa)
 
 int arbolLleno(const tArbol *pa, unsigned tam)
 {
-    void *nodo = malloc(sizeof(tNodo));
+    void *nodo = malloc(sizeof(tNodoArbol));
     void *dato = malloc(tam);
     int lleno = (nodo == NULL || dato == NULL);
 

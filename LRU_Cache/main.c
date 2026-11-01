@@ -8,6 +8,110 @@
 //}
 
 ///prueba gemini archivos
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "Tweener/Tweener.h"
+
+static void probarLote(const char *nomArchPosteos, const char *nomArchUsuarios,
+                       const char *descLote, int cantUsuarios,
+                       const size_t *capacidades, int cantCapacidades)
+{
+    tMetricasSimulacion metricas;
+    const size_t *pCap;
+    const size_t *pFinCap;
+    char titulo[128];
+
+    printf("\n======================================================================\n");
+    printf("EVALUANDO: %s\n", descLote);
+    printf("Usuarios: %d | Total de consultas: %d\n", cantUsuarios, cantUsuarios * CANT_FEED_USUARIO);
+    printf("======================================================================\n\n");
+
+    /* 1. Medicion SIN CACHE */
+    if (simularSinCache(nomArchPosteos, nomArchUsuarios, &metricas))
+    {
+        imprimirReporte("MODO: Sin Cache (Lectura directa de disco)", &metricas, cantUsuarios);
+    }
+
+    pFinCap = capacidades + cantCapacidades;
+
+    /* 2. Medicion con CACHE PARTE 1 (Lista Simple) para cada capacidad */
+    pCap = capacidades;
+    while (pCap < pFinCap)
+    {
+        sprintf(titulo, "MODO: Cache Parte 1 (Lista Simple) - Capacidad: %lu", (unsigned long)*pCap);
+        if (simularCacheParte1(nomArchPosteos, nomArchUsuarios, *pCap, &metricas))
+        {
+            imprimirReporte(titulo, &metricas, cantUsuarios);
+        }
+        pCap++;
+    }
+
+    /* 3. Medicion con CACHE PARTE 2 (Lista Doble + Arbol) para cada capacidad */
+    pCap = capacidades;
+    while (pCap < pFinCap)
+    {
+        sprintf(titulo, "MODO: Cache Parte 2 (Lista Doble + Arbol) - Capacidad: %lu", (unsigned long)*pCap);
+        if (simularCacheParte2(nomArchPosteos, nomArchUsuarios, *pCap, &metricas))
+        {
+            imprimirReporte(titulo, &metricas, cantUsuarios);
+        }
+        pCap++;
+    }
+}
+
+int main()
+{
+    const char *nomPosteos = "posteos.bin";
+    const char *nomConc = "usuarios_concentrado.bin";
+    const char *nomDisp = "usuarios_disperso.bin";
+    const char *nomOrd  = "usuarios_ordenado.bin";
+
+    int cantUsuarios = 50000;
+    unsigned int semilla = 2026;
+    size_t capacidades[] = { 50, 200, 1000 };
+    int cantCapacidades = 3;
+    FILE *pfTest;
+
+    printf("======================================================================\n");
+    printf("       SIMULACION RED SOCIAL 'TWEENER' - BENCHMARK LRU CACHE         \n");
+    printf("======================================================================\n\n");
+
+    /* 1. Verificamos si existe el archivo de posteos; si no existe, lo creamos */
+    pfTest = fopen(nomPosteos, "rb");
+    if (!pfTest)
+    {
+        printf("Creando '%s' con %d posteos...\n", nomPosteos, TOTAL_POSTEOS);
+        if (!generarArchivoPosteos(nomPosteos, TOTAL_POSTEOS))
+        {
+            printf("Error critico al generar archivo de posteos.\n");
+            return 1;
+        }
+    }
+    else
+    {
+        fclose(pfTest);
+        printf("Archivo de posteos '%s' verificado.\n", nomPosteos);
+    }
+
+    /* 2. Generamos los 3 lotes de prueba con la semilla fija requerida */
+    printf("Generando lotes de prueba con semilla %u...\n", semilla);
+    generarLoteUsuarios(nomConc, cantUsuarios, LOTE_CONCENTRADO, semilla);
+    generarLoteUsuarios(nomDisp, cantUsuarios, LOTE_DISPERSO, semilla);
+    generarLoteUsuarios(nomOrd,  cantUsuarios, LOTE_ORDENADO, semilla);
+    printf("Lotes generados con exito.\n");
+
+    /* 3. Ejecucion de simulaciones por cada lote */
+    probarLote(nomPosteos, nomConc, "LOTE CONCENTRADO (Alta tasa de Hits)", cantUsuarios, capacidades, cantCapacidades);
+    probarLote(nomPosteos, nomDisp, "LOTE DISPERSO (Baja tasa de Hits)", cantUsuarios, capacidades, cantCapacidades);
+    probarLote(nomPosteos, nomOrd,  "LOTE ORDENADO (Prueba de degeneracion del ABB)", cantUsuarios, capacidades, cantCapacidades);
+
+    printf("\nSimulacion completada exitosamente.\n");
+    return 0;
+}
+
+/*
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -116,6 +220,7 @@ int main()
     return 0;
 }
 
+*/
 
 //#include <stdio.h>
 //#include <stdlib.h>
