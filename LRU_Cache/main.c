@@ -3,6 +3,126 @@
 #include <string.h>
 #include "Tweener/Tweener.h"
 
+
+///* 1. Función de comparación obligatoria para inicializar la caché */
+//int cmpClavesInt(const void *a, const void *b)
+//{
+//    int clave1 = *(const int *)a;
+//    int clave2 = *(const int *)b;
+//    return clave1 - clave2;
+//}
+//
+///* Función auxiliar para limpiar la lista simple generada en la prueba */
+//void destruirListaSimplePrueba(tNodo1 **lista)
+//{
+//    tNodo1 *actual = *lista;
+//    tNodo1 *sig;
+//    while(actual)
+//    {
+//        sig = actual->sig;
+//        free(actual->info);
+//        free(actual);
+//        actual = sig;
+//    }
+//    *lista = NULL;
+//}
+//
+//int main()
+//{
+//    tCacheListaDoble cache;
+//    int i, claveBusq, datoSalida, cantTop;
+//
+//    /* Variables para pruebas de extracción */
+//    int vectorSalida[3];
+//    tNodo1 *listaDestino = NULL;
+//    tNodo1 *recorrerLista = NULL;
+//
+//    /* INICIALIZACIÓN: Caché con capacidad máxima de 5 elementos */
+//    crearLruCacheListaDobleyArbol(&cache, 5, sizeof(int), sizeof(int), cmpClavesInt);
+//
+//    printf("==================================================\n");
+//    printf("1. CARGA INICIAL (Insertando 1 al 5)\n");
+//    printf("==================================================\n");
+//    for(i = 1; i <= 5; i++)
+//    {
+//        int clave = i;          /* Claves: 1, 2, 3, 4, 5 */
+//        int dato = i * 100;     /* Datos: 100, 200, 300, 400, 500 */
+//        agregarLruCacheListaDobleyArbol(&cache, &clave, &dato);
+//    }
+//
+//    /* El más reciente debe ser el último insertado (el 5) */
+//    printf("Estado de las claves (De MRU a LRU):\n");
+//    imprimirEstadoCache(&cache);
+//
+//    printf("\n==================================================\n");
+//    printf("2. PEEK Y CONSISTENCIA\n");
+//    printf("==================================================\n");
+//
+//    claveBusq = 3;
+//    if(consultarPeekLruCache(&cache, &claveBusq, &datoSalida))
+//        printf("PEEK Clave %d -> Dato encontrado: %d (Silencioso)\n", claveBusq, datoSalida);
+//    else
+//        printf("PEEK Clave %d -> No encontrado\n", claveBusq);
+//
+//    printf("Validando que el Peek no altero el orden:\n");
+//    imprimirEstadoCache(&cache);
+//
+//    printf("\nAuditoria de consistencia (Nodos Arbol vs Nodos Lista): %s\n",
+//            validarConsistenciaCache(&cache) ? "CORRECTA" : "ERROR");
+//
+//    printf("Hojas en el arbol: %d (Como ingresaron ordenados 1->5, deberia ser 1 hoja)\n",
+//            contarHojasArbolIndices(&cache.arbol));
+//
+//    printf("\n==================================================\n");
+//    printf("3. OBTENER TOP N RECIENTES\n");
+//    printf("==================================================\n");
+//
+//    /* Prueba con Vector estático */
+//    cantTop = obtenerTopNRecientes(&cache, 3, vectorSalida);
+//    printf("Top %d en Vector estatico:\n", cantTop);
+//    for(i = 0; i < cantTop; i++)
+//    {
+//        printf(" - Dato copiado en vector[%d]: %d\n", i, vectorSalida[i]);
+//    }
+//
+//    /* Prueba generando una Lista Simple Dinámica */
+//    cantTop = obtenerTopNUltimosLista(&cache, 3, &listaDestino);
+//    printf("\nTop %d en Lista Simple dinamica:\n", cantTop);
+//    recorrerLista = listaDestino;
+//    i = 0;
+//    while(recorrerLista)
+//    {
+//        printf(" - Nodo %d de la Lista: %d\n", i++, *(int*)recorrerLista->info);
+//        recorrerLista = recorrerLista->sig;
+//    }
+//    destruirListaSimplePrueba(&listaDestino); /* Limpiamos para evitar fugas en Valgrind */
+//
+//    printf("\n==================================================\n");
+//    printf("4. REDIMENSIONAR (Downgrade de 5 a 3)\n");
+//    printf("==================================================\n");
+//    redimensionarLruCache(&cache, 3);
+//
+//    /* Deberían haber sobrevivido solo 5, 4 y 3 */
+//    printf("Nuevo estado de la cache (Capacidad actual: %d):\n", cache.cap);
+//    imprimirEstadoCache(&cache);
+//
+//    printf("\n==================================================\n");
+//    printf("5. INVERTIR CACHE (Trampa de examen)\n");
+//    printf("==================================================\n");
+//    invertirOrdenCache(&cache);
+//
+//    /* Ahora debería imprimir 3, 4, 5 */
+//    printf("Estado invertido:\n");
+//    imprimirEstadoCache(&cache);
+//
+//    printf("\n==================================================\n");
+//    printf("6. LIMPIEZA FINAL Y DESTRUCCION\n");
+//    printf("==================================================\n");
+//    vaciarLruCacheListaDobleyArbol(&cache);
+//    printf("Destruccion completada. Elementos en cache: %d\n", cache.ce);
+//
+//    return 0;
+//}
 static void probarLote(const char *nomArchPosteos, const char *nomArchUsuarios,
                        const char *descLote, int cantUsuarios,
                        const size_t *capacidades, int cantCapacidades)

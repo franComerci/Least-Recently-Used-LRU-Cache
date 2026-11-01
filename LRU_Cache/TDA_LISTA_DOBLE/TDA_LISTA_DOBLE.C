@@ -121,7 +121,7 @@ void vaciarListaDoble(tListaDoble *pl)
     if (!*pl)
         return;
 
-    while ((*pl)->ant)                              // voy al principio
+    while ((*pl)->ant)// voy al principio
         *pl = (*pl)->ant;
 
     while (*pl)
