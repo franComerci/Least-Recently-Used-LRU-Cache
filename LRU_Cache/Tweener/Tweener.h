@@ -57,4 +57,3 @@ int simularCacheParte2(const char *nomArchPosteos, const char *nomArchUsuarios, 
 void imprimirReporte(const char *titulo, const tMetricasSimulacion *metricas, int totalUsuarios);
 
 #endif /* TWEENER_H_INCLUDED */
-

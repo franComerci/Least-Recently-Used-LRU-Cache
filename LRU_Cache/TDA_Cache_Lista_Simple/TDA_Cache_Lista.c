@@ -99,8 +99,8 @@ void vaciarLruCache(tCache *cache)
 
 int extraerDeCache(tCache *cache, const void *clave, tElemCache *elem)
 {
-    tNodo *actual = cache->lista;
-    tNodo *anterior = NULL;
+    tNodo1 *actual = cache->lista;
+    tNodo1 *anterior = NULL;
 
     while(actual)
     {

@@ -1,8 +1,5 @@
 #include "Tweener.h"
 
-/* Funcion auxiliar para generar enteros en un rango amplio [0, maxExcl - 1] */
-/* Nota: En Windows/MinGW RAND_MAX suele ser 32767, por lo que rand() % 50000 */
-/* no cubriria valores superiores a 32767 sin este ajuste de bits.            */
 static int randRango(int maxExcl)
 {
     unsigned int r;
@@ -426,3 +423,4 @@ void imprimirReporte(const char *titulo, const tMetricasSimulacion *metricas, in
     }
     printf("----------------------------------------------------------------------\n\n");
 }
+

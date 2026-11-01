@@ -14,7 +14,7 @@ int cmpInt(const void *a, const void *b)
 ///DESCRIPCION Muestra el estado de la cache
 void mostrarCache(tCache *cache)
 {
-    tNodo *actual = cache->lista;
+    tNodo1 *actual = cache->lista;
     printf("Estado Cache (%lu/%lu):\n", (unsigned long)cache->ce, (unsigned long)cache->cap);
 
     if (actual == NULL) {
