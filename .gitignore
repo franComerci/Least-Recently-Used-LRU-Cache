@@ -3,3 +3,7 @@ bin/
 obj/
 *.layout
 *.depend
+*.exe
+*.o
+*.bin
+millones_datos.txt

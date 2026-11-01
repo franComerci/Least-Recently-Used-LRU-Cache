@@ -54,6 +54,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="TDA_LISTA_DOBLE/TDA_LISTA_DOBLE.h" />
+		<Unit filename="Tweener/Tweener.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Tweener/Tweener.h" />
 		<Unit filename="Utilitarias.c">
 			<Option compilerVar="CC" />
 		</Unit>

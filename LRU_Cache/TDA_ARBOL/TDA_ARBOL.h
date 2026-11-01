@@ -7,21 +7,21 @@
 #include "../comun.h"
 
 #define reservarMemoriaNodo(X , Y , Z , W) (            \
-                ( ( X ) = ( tNodo* )malloc( Y ) ) == NULL || \
+                ( ( X ) = ( tNodoArbol* )malloc( Y ) ) == NULL || \
                 ( ( Z ) = malloc( W ) ) == NULL ? \
                     free(X), 0 : 1 )
 
 #define MAXIMO(a, b) ((a) > (b) ? (a) : (b))
 
-typedef struct sNodo
+typedef struct sNodoArbol
 {
     void *dato;
     unsigned tam;
-    struct sNodo *izq;
-    struct sNodo *der;
-} tNodo;
+    struct sNodoArbol *izq;
+    struct sNodoArbol *der;
+} tNodoArbol;
 
-typedef tNodo *tArbol;
+typedef tNodoArbol *tArbol;
 
 void    crearArbol(tArbol *pa);
 int     insertarOrdenado(tArbol *pa, void *dato, unsigned tam, Cmp comparar);
