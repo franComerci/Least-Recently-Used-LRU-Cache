@@ -7,14 +7,14 @@
 #define MIN( X , Y ) ( ( X ) <= ( Y ) ? ( X ) : ( Y ) )
 
 
-typedef struct sNodo
+typedef struct sNodo1
 {
     void *info;
     size_t tamInfo;
-    struct sNodo *sig;
-}tNodo;
+    struct sNodo1 *sig;
+}tNodo1;
 
-typedef tNodo *tLista;
+typedef tNodo1 *tLista;
 
 void crearLista(tLista *pl);
 int listaVacia(const tLista *pl);
