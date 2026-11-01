@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Tweener/Tweener.h"
+#include "Defensa/funcionesDefensa.h"
 
-
-///* 1. Función de comparación obligatoria para inicializar la caché */
+/* 1. Función de comparación obligatoria para inicializar la caché */
 //int cmpClavesInt(const void *a, const void *b)
 //{
 //    int clave1 = *(const int *)a;

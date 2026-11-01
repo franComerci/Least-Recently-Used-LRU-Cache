@@ -45,18 +45,10 @@ int destruirLruCacheListaDobleyArbol(tCacheListaDoble *cache);
 int cacheListaDobleLlenayArbol(const tCacheListaDoble *cache);
 int cacheListaDobleVaciayArbol(const tCacheListaDoble *cache);
 int alturaIndiceLruCacheListaDobleyArbol(const tCacheListaDoble *cache);
+void sacarUltNodo(tCacheListaDoble *cache);
+tArbol *buscarNodoEnArbol(tCacheListaDoble *cache, const void *clave);
 
 
-///FUNCIONES PARA LA DEFENSA
-int consultarPeekLruCache(tCacheListaDoble *cache, const void *clave, void *dato);
-int redimensionarLruCache(tCacheListaDoble *cache, size_t nuevaCapacidad);
-void imprimirEstadoCache(const tCacheListaDoble *cache);
-int contarHojasArbolIndices(const tArbol *arbol);
-int obtenerTopNRecientes(const tCacheListaDoble *cache, int n, void *vectorSalida);
-int obtenerTopNRecientesLista(const tCacheListaDoble *cache, int n, tNodo1 **lista);
-int contarNodosArbol(const tArbol *arbol);
-int validarConsistenciaCache(const tCacheListaDoble *cache);
-void invertirOrdenCache(tCacheListaDoble *cache);
-int obtenerTopNUltimosLista(const tCacheListaDoble *cache, int n, tNodo1 **lista);
+
 
 #endif // TDA_CACHE_OPTIMIZADA_H_INCLUDED
