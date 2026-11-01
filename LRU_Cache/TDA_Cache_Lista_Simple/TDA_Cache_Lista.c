@@ -10,6 +10,8 @@ void crearLruCache(tCache *cache, size_t maxCap, size_t tamClave, size_t tamDato
     cache->cmp = cmp;
 }
 
+
+
 int agregarLruCache(tCache *cache, const void *clave, const void *dato)
 {
     tElemCache elem;
