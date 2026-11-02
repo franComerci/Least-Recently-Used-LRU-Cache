@@ -6,6 +6,7 @@
 #include "../TDA_LISTA_DOBLE/TDA_LISTA_DOBLE.h"
 #include "../Utilitiarias.h"
 #include "../comun.h"
+#include "../Tweener/Tweener.h"
 ///FUNCIONES PARA LA DEFENSA
 int consultarPeekLruCache(tCacheListaDoble *cache, const void *clave, void *dato);
 int redimensionarLruCache(tCacheListaDoble *cache, size_t nuevaCapacidad);
@@ -17,5 +18,7 @@ int contarNodosArbol(const tArbol *arbol);
 int validarConsistenciaCache(const tCacheListaDoble *cache);
 void invertirOrdenCache(tCacheListaDoble *cache);
 int obtenerTopNUltimosLista(const tCacheListaDoble *cache, int n, tNodo1 **lista);
-
+int cacheFiltro(tCacheListaDoble *cache, int (*filtro)(const void *dato));
+int mapCache(tCacheListaDoble *cache, int (*criterio)(const void *dato));
+int extraerRangoClaves(tCacheListaDoble *cache, void *claveMin, void *claveMax, tListaDoble *listaSalida);
 #endif // FUNCIONESDEFENSA_H_INCLUDED

@@ -1,8 +1,7 @@
 #include "funcionesDefensa.h"
-
 ///Funciones para defensa
 /*
-1. La función "Peek" (Lectura silenciosa)Contexto: En sistemas reales, a veces el administrador necesita consultar un dato de la caché para auditoría,
+La función "Peek" (Lectura silenciosa)Contexto: En sistemas reales, a veces el administrador necesita consultar un dato de la caché para auditoría,
 pero sin alterar el orden de prioridad temporal (es decir, sin convertirlo en el Más Recientemente Usado).
 Consigna: Escribir la función int consultarPeekLruCache(tCacheListaDoble *cache, const void *clave, void *dato).
 Qué evalúan: Tu capacidad para reutilizar la lógica de búsqueda en el árbol de índices, extraer el dato copiándolo en la variable de destino,
@@ -25,7 +24,8 @@ int consultarPeekLruCache(tCacheListaDoble *cache, const void *clave, void *dato
     return 0;
 }
 
-/*2. Redimensionamiento en caliente (El desafío complejo)Contexto: El servidor de "Tweener" recibió una actualización de hardware y ahora tiene más RAM, o por el contrario,
+/*
+Redimensionamiento en caliente (El desafío complejo)Contexto: El servidor de "Tweener" recibió una actualización de hardware y ahora tiene más RAM, o por el contrario,
 entró en modo ahorro de energía y necesita liberar memoria.Consigna: Escribir la función int redimensionarLruCache(tCacheListaDoble *cache, size_t nuevaCapacidad).
 Qué evalúan: Si nuevaCapacidad es mayor, solo se actualiza cache->cap. El verdadero desafío es si la nueva capacidad es menor a la cantidad de elementos actuales (cache->ce).
 En ese caso, debés programar un ciclo while que llame repetidamente a tu función de desalojo (sacarUltNodo) hasta que ce == nuevaCapacidad.*/
@@ -46,7 +46,7 @@ int redimensionarLruCache(tCacheListaDoble *cache, size_t nuevaCapacidad)
 }
 
 /*
-3. Recorrido de auditoría (MRU a LRU)Contexto: Para verificar que la lista doble está manejando correctamente el orden temporal,
+Recorrido de auditoría (MRU a LRU)Contexto: Para verificar que la lista doble está manejando correctamente el orden temporal,
 se te pide imprimir las claves en pantalla desde la más nueva hasta la más vieja a punto de ser eliminada.Consigna: Suponiendo que las claves son números enteros,
 escribí una función void imprimirEstadoCache(const tCacheListaDoble *cache) que recorra la lista y haga un printf de cada clave.Qué evalúan: El manejo básico de listas enlazadas.
 Quieren ver si escribís correctamente el ciclo while(actual != NULL), cómo casteás el puntero actual->dato hacia tElemCacheListaDoble*, y cómo extraés la clave casteándola a int* antes de imprimirla.
@@ -65,7 +65,7 @@ void imprimirEstadoCache(const tCacheListaDoble *cache)
 }
 
 /*
-4. Análisis del Árbol de ÍndicesContexto: Como el benchmark demostró que el árbol se puede degenerar, el profesor quiere saber cuántos nodos en tu árbol quedaron como "hojas"
+Análisis del Árbol de ÍndicesContexto: Como el benchmark demostró que el árbol se puede degenerar, el profesor quiere saber cuántos nodos en tu árbol quedaron como "hojas"
 (nodos sin hijos izquierdo ni derecho), ya que un árbol degenerado tiene una sola hoja, mientras que uno balanceado tiene muchas.
 Consigna: Diseñar la función int contarHojasArbolIndices(const tArbol *arbol) para el TDA Árbol.
 Qué evalúan: Recursividad estricta en C. Tenés que identificar el caso base (si el árbol está vacío, retorna 0),
@@ -82,7 +82,7 @@ int contarHojasArbolIndices(const tArbol *arbol)
  }
 
  /*
- 5. Obtener los "N" más recientes (Ideal para el Feed de "Tweener")
+Obtener los "N" más recientes (Ideal para el Feed de "Tweener")
 En una red social no sacás un solo posteo, a veces querés cargar los últimos 5 o 10 más recientes que están en memoria.
 Esta función recorre la lista desde la cabecera (los más nuevos) y copia los datos en un vector.
  */
@@ -187,7 +187,7 @@ int obtenerTopNUltimosLista(const tCacheListaDoble *cache, int n, tNodo1 **lista
     return cant;
 }
 /*
-2. Sanity Check: Validación de Consistencia
+Sanity Check: Validación de Consistencia
 Como tenés dos estructuras corriendo en paralelo (la Lista y el Árbol), un bug crítico sería que un
 elemento se borre de la lista pero quede "fantasma" en el árbol.
 Esta función verifica que el árbol y la lista tengan exactamente la misma cantidad de elementos.
@@ -236,4 +236,198 @@ void invertirOrdenCache(tCacheListaDoble *cache)
 
     cache->listaDoble = prev;
 }
+
+/*
+
+Recorre la caché y elimina de la lista doble y del árbol todos los posteos o elementos cuyo dato cumpla con la condición inyectada por la función filtro
+(ejemplo: posteos de un usuario baneado en la red social). Retorna la cantidad de elementos eliminados.
+Trampa: Al borrar elementos en el medio de la iteración, tenés que resguardar el puntero actual->sig antes de hacer el free para no perder el hilo de la lista.
+*/
+int filtroCache(const void *dato)
+{
+    tPosteo *elem = (tPosteo *)dato;
+    return elem->id % 2;
+}
+int cacheFiltro(tCacheListaDoble *cache, int (*filtro)(const void *dato))
+{
+    int ce = 0;
+    if(!cache)
+        return -1;
+    tNodo2 *nodoLista = cache->listaDoble;
+
+    while(nodoLista)
+    {
+        tElemCacheListaDoble *elem = (tElemCacheListaDoble *)nodoLista->dato;
+
+        tNodo2 *sig = nodoLista->sig; //tengo que guardarlo acá porque llamo a borrar lruCache y se va el nodo
+        if(filtro(elem->dato))
+        {
+            borrarLruCacheListaDobleyArbol(cache, elem->clave);
+            ce++;
+        }
+
+        nodoLista = sig;
+    }
+
+    return ce;
+}
+
+/*
+Promoción en Bloque (Bulk MRU)int promoverBloqueMRU(tCacheListaDoble *cache, int (*criterio)(const void *dato));
+Mueve al principio de la lista doble (posición MRU) a todos los elementos que cumplan el criterio, pero manteniendo el orden relativo que tenían entre ellos.
+No se elimina nada, solo se desenlazan y reenlazan los nodos.
+*/
+
+int mapCache(tCacheListaDoble *cache, int (*criterio)(const void *dato))
+{
+    if(!cache || cache->ce == 0)
+        return 0;
+
+    //vector para guardar los elementos
+    tNodo2 **aMover = malloc(cache->ce * sizeof(tNodo2 *));
+    if(!aMover)
+        return 0;
+
+    int cant = 0;
+    tNodo2 *nodoLista = cache->ultNodo;
+
+    //recorro de atras para adelante para quedarme con el orden
+    while(nodoLista)
+    {
+        tElemCacheListaDoble *elem = (tElemCacheListaDoble *)nodoLista->dato;
+        tNodo2 *ant = nodoLista->ant;
+
+        if(criterio(elem->dato))
+        {
+            *(aMover + cant) = nodoLista;
+            cant++;
+        }
+        nodoLista = ant;
+    }
+
+    //los cargo en la lista
+    for(int i = 0; i < cant; i++)
+    {
+        moverAlPrincipio(cache, *(aMover + i));
+    }
+
+    free(aMover);
+
+    return 1;
+}
+/*
+Extracción de Rango de Claves int extraerRangoClaves(tCacheListaDoble *cache, void *claveMin, void *claveMax, tListaDoble *listaSalida);
+Utilizando la eficiencia del árbol binario de índices, encontrá todos los elementos cuyas claves estén entre claveMin y claveMax (inclusives).
+Desenlazá esos nodos de la caché (borrándolos del árbol y de la lista interna) y enganchalos ordenados en la listaSalida.
+*/
+
+int extraerRangoClaves(tCacheListaDoble *cache, void *claveMin, void *claveMax, tListaDoble *listaSalida)
+{
+    if(!cache || !listaSalida) return 0;
+
+    int cant = 0;
+    tNodo2 *actual = cache->listaDoble;
+
+    /* Posicionamiento en el último nodo de la lista de salida */
+    tNodo2 *ultSalida = *listaSalida;
+    while(ultSalida && ultSalida->sig) ultSalida = ultSalida->sig;
+
+    while(actual)
+    {
+        tNodo2 *sig = actual->sig;
+        tElemCacheListaDoble *elem = (tElemCacheListaDoble *)actual->dato;
+
+        if(cache->cmp(elem->clave, claveMin) >= 0 && cache->cmp(elem->clave, claveMax) <= 0)
+        {
+            /* Desenlazar de la caché */
+            conectarNodo(cache, actual);
+            eliminarNodo(&cache->arbol, elem->clave, cache->tamDato, cache->cmp);
+            cache->ce--;
+
+            /* Enlazar directamente a listaSalida reciclando el tNodo2 exacto */
+            actual->sig = NULL;
+            actual->ant = ultSalida;
+
+            if(ultSalida) ultSalida->sig = actual;
+            else *listaSalida = actual;
+
+            ultSalida = actual;
+            cant++;
+        }
+        actual = sig;
+    }
+    return cant;
+}
+
+/*
+Serialización Segura a Binario
+int volcarCacheBinario(const tCacheListaDoble *cache, const char *rutaArchivo);
+Escribe el estado actual de la caché en un archivo binario. Debe guardar un encabezado con la cantidad de elementos y los tamaños (tamClave, tamDato), seguido de los bloques de memoria cruda de cada elemento en el orden exacto de MRU a LRU.
+Trampa: No podés guardar los nodos (que tienen punteros), tenés que extraer y escribir únicamente los void *clave y void *dato de cada tElemCacheListaDoble.
+*/
+
+
+int volcarCacheBinario(const tCacheListaDoble *cache, const char *rutaArchivo)
+{
+    FILE *arch = fopen(rutaArchivo, "wb");
+    if(!arch)
+        return 0;
+
+    fwrite(&cache->ce, sizeof(cache->ce), 1, arch);
+    fwrite(&cache->tamClave, sizeof(cache->tamClave), 1, arch);
+    fwrite(&cache->tamDato, sizeof(cache->tamDato), 1, arch);
+    tNodo2 *nodoLista = cache->listaDoble;
+
+    while(nodoLista)
+    {
+        tElemCacheListaDoble *elem = (tElemCacheListaDoble *)nodoLista->dato;
+        fwrite(elem->clave, cache->tamClave, 1, arch);
+        fwrite(elem->dato, cache->tamDato, 1, arch);
+        nodoLista = nodoLista->sig;
+    }
+
+    fclose(arch);
+
+    return 1;
+}
+
+/*
+Clonación Profunda (Deep Clone)
+int clonarCacheLru(const tCacheListaDoble *original, tCacheListaDoble *clon);
+Crea una copia exacta y funcional de la caché original en una nueva variable clon.
+La nueva caché debe tener sus propios nodos de árbol, sus propios nodos de lista y sus propias reservas de memoria (malloc)
+para cada clave y dato, copiando el contenido con memcpy.
+*/
+int clonarCacheLru(const tCacheListaDoble *original, tCacheListaDoble *clon)
+{
+    if (!original || !clon)
+        return 0;
+
+    crearLruCacheListaDobleyArbol(clon, original->cap, original->tamClave, original->tamDato, original->cmp);
+
+    //arranco desde el final para no tener que volver a cargar
+    tNodo2 *act = original->ultNodo;
+
+    while (act)
+    {
+        tElemCacheListaDoble *elem = (tElemCacheListaDoble *)act->dato;
+        if (!agregarLruCacheListaDobleyArbol(clon, elem->clave, elem->dato))
+        {
+            //si falla la memoria, vaciamos
+            vaciarLruCacheListaDobleyArbol(clon);
+            return 0;
+        }
+
+        act = act->ant;
+    }
+
+    return 1;
+}
+
+/*
+Inversión Parcial (Mitad LRU)
+void invertirMitadViejaCache(tCacheListaDoble *cache);
+A diferencia de tu función de invertir toda la caché, esta función debe encontrar el punto medio exacto de la lista doble y solo invertir los punteros de la mitad más vieja
+(la que está cerca de ultNodo), dejando la mitad más nueva intacta.
+*/
 

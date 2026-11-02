@@ -41,14 +41,12 @@ int agregarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, 
 int obtenerLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave, void *dato);
 int borrarLruCacheListaDobleyArbol(tCacheListaDoble *cache, const void *clave);
 int vaciarLruCacheListaDobleyArbol(tCacheListaDoble *cache);
-int destruirLruCacheListaDobleyArbol(tCacheListaDoble *cache);
-int cacheListaDobleLlenayArbol(const tCacheListaDoble *cache);
-int cacheListaDobleVaciayArbol(const tCacheListaDoble *cache);
+
 int alturaIndiceLruCacheListaDobleyArbol(const tCacheListaDoble *cache);
 void sacarUltNodo(tCacheListaDoble *cache);
 tArbol *buscarNodoEnArbol(tCacheListaDoble *cache, const void *clave);
-
-
-
+void moverAlPrincipio(tCacheListaDoble *cache, tNodo2 *nodoLista);
+void borrarNodoLista(tNodo2 *nodoLista);
+void conectarNodo(tCacheListaDoble *cache, tNodo2 *nodoLista);
 
 #endif // TDA_CACHE_OPTIMIZADA_H_INCLUDED
